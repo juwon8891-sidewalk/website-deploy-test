@@ -26,5 +26,5 @@ jobs:
         
     - name: Upload to Google Cloud Storage
       run: |
-        gcloud auth activate-service-account --key-file '${{ secrets.GOOGLE_CREDENTIALS_STORAGE }}'
+        gsutil config
         gsutil ls
