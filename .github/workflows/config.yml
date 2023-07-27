@@ -1,0 +1,78 @@
+name: Dart Website
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Dart Build
+    runs-on: ubuntu-latest
+    env:
+      RUNNER_OS: macos
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Cache Dart SDK
+      uses: actions/cache@v2
+      with:
+        path: ~/.dart-sdk
+        key: ${{ runner.os }}-dart-${{ hashFiles('**/pubspec.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-dart-
+
+    - name: Set up  
+      uses: subosito/flutter-action@v2
+      with:
+        # flutter-version: '2.x'
+        channel: 'stable'
+
+    - name: Get dependencies
+      run: flutter pub get
+
+    - name: Run build
+      run: flutter build web
+
+  add_google_analytics:
+    name: Add Google Analytics
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Add Google Analytics Code <head>
+      run: |
+        sed -i '1s;^;<!-- Google Tag Manager -->\n<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':\nnew Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0],\n  j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=\n  \'https://www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f);\n  })(window,document,\'script\',\'dataLayer\',\'GTM-TK8QNKQQ\');</script>\n<!-- End Google Tag Manager -->\n\n;' build/web/index.html
+
+    - name: Add Google Analytics Code <body>
+      run: |
+        sed -i '/<body>/ a <!-- Google Tag Manager (noscript) -->\n<noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-TK8QNKQQ\"\nheight=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>\n<!-- End Google Tag Manager (noscript) -->\n\n;' build/web/index.html
+
+  deploy_to_cloud_storage:
+    name: Deploy to Cloud Storage
+    runs-on: ubuntu-latest
+
+    needs: add_google_analytics
+
+    steps:
+    - name: Install Google Cloud SDK
+      run: |
+        curl https://sdk.cloud.google.com | bash
+        exec -l $SHELL
+        gcloud components install gsutil
+
+    - name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+
+    - name: Upload to Google Cloud Storage
+      run: |
+        gsutil -m cp -r build/web gs://stepin.ai
+        gsutil -h "Cache-Control: no-cache, no-store, max-age=0" -m cp -r build/web gs://stepin.ai/**.html
+        gsutil -h "Cache-Control: public, max-age=604800" set -r gs://stepin.ai/assets/**
