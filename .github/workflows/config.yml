@@ -45,8 +45,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Modify Google Analytics Code
-      run: python modify_google_analytics.py
+    - name: Add Google Analytics Code
+      run: python add_google_analytics.py
 
   deploy_to_cloud_storage:
     name: Deploy to Cloud Storage
