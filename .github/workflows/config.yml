@@ -7,53 +7,8 @@ on:
 
 jobs:
   build:
-    name: Dart Build
+    name: Dart Build & GA Add
     runs-on: ubuntu-latest
-    # env:
-    #   RUNNER_OS: macos
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Cache Dart SDK
-      uses: actions/cache@v2
-      with:
-        path: ~/.dart-sdk
-        key: ${{ runner.os }}-dart-${{ hashFiles('**/pubspec.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-dart-
-
-    - name: Set up  
-      uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.10.6'
-        channel: 'stable'
-
-    - name: Get dependencies
-      run: flutter pub get
-
-    - name: Run build
-      run: flutter build web
-
-  add_google_analytics:
-    name: Add Google Analytics
-    runs-on: ubuntu-latest
-
-    needs: build
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Add Google Analytics Code
-      run: python add_google_analytics.py
-
-  deploy_to_cloud_storage:
-    name: Deploy to Cloud Storage
-    runs-on: ubuntu-latest
-
-    needs: add_google_analytics
-
     steps:
     - name: Install Google Cloud SDK
       run: |
@@ -64,10 +19,8 @@ jobs:
     - name: Authenticate with Google Cloud
       uses: google-github-actions/auth@v1
       with:
-        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS_STORAGE }}'
 
     - name: Upload to Google Cloud Storage
       run: |
-        gsutil -m cp -r build/web gs://stepin.ai
-        gsutil -h "Cache-Control: no-cache, no-store, max-age=0" -m cp -r build/web gs://stepin.ai/**.html
-        gsutil -h "Cache-Control: public, max-age=604800" set -r gs://stepin.ai/assets/**
+        gsutil -m cp -r README.md gs://stepin.ai
