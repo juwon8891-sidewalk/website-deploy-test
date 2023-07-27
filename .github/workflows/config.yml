@@ -11,12 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Authenticate with Google Cloud
-      uses: 'google-github-actions/setup-gcloud@v1'
+      uses: 'google-github-actions/auth@v1'
       with:
-        service_account_key: '${{ secrets.GOOGLE_CREDENTIALS_STORAGE }}'
-        project_id: 'stepin-website'
-        
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS_STORAGE }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+      
     - name: Upload to Google Cloud Storage
       run: |
-        gsutil -m cp -r gs://stepin.ai/img.png . && gsutil -m cp -r img.png gs://stepin.ai/
+        gsutil -m cp -r gs://stepin.ai/img.png .
+        gsutil -m cp -r img.png gs://stepin.ai/
         gsutil -h "Cache-Control: public, max-age=604800" set -r gs://stepin.ai/img.png
