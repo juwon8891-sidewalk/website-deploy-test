@@ -13,17 +13,11 @@ jobs:
       contents: 'read'
       id-token: 'write'
     steps:
-    - name: Install Google Cloud SDK
-      run: |
-        curl https://sdk.cloud.google.com | bash
-        exec -l $SHELL
-        gcloud components install gsutil
-
     - name: Authenticate with Google Cloud
       uses: 'google-github-actions/setup-gcloud@v1'
       with:
         service_account_key: '${{ secrets.GOOGLE_CREDENTIALS_STORAGE }}'
-        export_default_credentials: true
+        project_id: 'stepin-website'
         
     - name: Upload to Google Cloud Storage
       run: |
