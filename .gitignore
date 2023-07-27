@@ -1,0 +1,25 @@
+# Dart and Flutter specific
+**/build/
+**/pubspec.lock
+**/.dart_tool/
+**/web/flutter_service_worker.js
+
+# IntelliJ IDE-specific
+.idea/
+
+# Visual Studio Code specific
+.vscode/
+
+# macOS specific
+**/.DS_Store
+
+# Web-specific
+web/main.dart.js
+web/main.dart.js.map
+web/main.dart.bootstrap.js
+web/main.dart.bootstrap.js.map
+web/index.html
+
+# Other
+*.iml
+*.log
