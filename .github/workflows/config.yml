@@ -23,7 +23,7 @@ jobs:
       uses: google-github-actions/auth@v1
       with:
         workload_identity_provider: 'projects/240629120330/locations/global/workloadIdentityPools/gitihub-action'
-        service_account: 'juwon8891@sidewalkplay.com'
+        service_account: 'dev-stepin@stepin-dev-377209.iam.gserviceaccount.com'
         
     - name: Upload to Google Cloud Storage
       run: |
