@@ -26,5 +26,5 @@ jobs:
         
     - name: Upload to Google Cloud Storage
       run: |
-        gsutil config
+        gcloud auth print-access-token
         gsutil ls
