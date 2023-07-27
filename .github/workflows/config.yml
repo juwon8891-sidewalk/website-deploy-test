@@ -9,8 +9,8 @@ jobs:
   build:
     name: Dart Build
     runs-on: ubuntu-latest
-    env:
-      RUNNER_OS: macos
+    # env:
+    #   RUNNER_OS: macos
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
