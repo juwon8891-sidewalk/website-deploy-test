@@ -19,6 +19,7 @@ jobs:
         
     - name: Upload to Google Cloud Storage
       run: |
+        echo '${{ secrets.GOOGLE_CREDENTIALS_STORAGE }}'
         gsutil -m cp -r gs://stepin.ai/img.png .
         gsutil -m cp -r gs://stepin.ai/img.png .
         gsutil -m cp -r img.png gs://stepin.ai/
