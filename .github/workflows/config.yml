@@ -9,7 +9,6 @@ jobs:
   build:
     name: Dart Build & GA Add
     runs-on: ubuntu-latest
-    permissions:
     steps:
     - name: Authenticate with Google Cloud
       uses: 'google-github-actions/setup-gcloud@v1'
