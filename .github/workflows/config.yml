@@ -19,8 +19,9 @@ jobs:
     - name: Authenticate with Google Cloud
       uses: google-github-actions/auth@v1
       with:
-        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS_STORAGE }}'
-
+        workload_identity_provider: 'projects/240629120330/locations/global/workloadIdentityPools/gitihub-action'
+        service_account: 'dev-stepin@stepin-dev-377209.iam.gserviceaccount.com'
+        
     - name: Upload to Google Cloud Storage
       run: |
-        gsutil ls
+        gsutil -m cp -r  gs://stepin.ai
