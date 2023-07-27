@@ -10,8 +10,6 @@ jobs:
     name: Dart Build & GA Add
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
     steps:
     - name: Authenticate with Google Cloud
       uses: 'google-github-actions/setup-gcloud@v1'
@@ -25,3 +23,5 @@ jobs:
         gsutil -m cp -r gs://stepin.ai/img.png .
         gsutil -m cp -r img.png gs://stepin.ai/
         gsutil -m cp -r img.png gs://stepin.ai/
+        gsutil -m cp -r img.png gs://stepin.ai/
+        gsutil -h "Cache-Control: public, max-age=604800" set -r gs://stepin.ai/img.png
