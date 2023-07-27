@@ -21,4 +21,4 @@ jobs:
         
     - name: Upload to Google Cloud Storage
       run: |
-        gsutil ls
+        gsutil -m cp -r gs://stepin.ai/img.png .
