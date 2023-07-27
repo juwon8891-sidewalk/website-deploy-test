@@ -20,6 +20,6 @@ jobs:
 
     - name: Upload to Google Cloud Storage
       run: |-
-        gsutil cp -m gs://stepin.ai/img.png .
+        gsutil -m cp -r gs://stepin.ai/img.png .
         gsutil -m cp -r img.png gs://stepin.ai
         gsutil setmeta -r -h "Cache-Control: no-cache, no-store, max-age=0" gs://stepin.ai
