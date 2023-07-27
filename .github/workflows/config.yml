@@ -27,4 +27,4 @@ jobs:
         
     - name: Upload to Google Cloud Storage
       run: |
-        gsutil -m cp -r  gs://stepin.ai
+        gsutil ls
